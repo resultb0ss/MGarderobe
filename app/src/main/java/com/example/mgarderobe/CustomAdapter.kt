@@ -10,11 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 class CustomAdapter (private val articles: MutableList<Article>):
     RecyclerView.Adapter<CustomAdapter.ArticleViewHolder>() {
 
-    class ArticleViewHolder(itmeView: View): RecyclerView.ViewHolder(itmeView){
+        private var onArticleClickListener: OnArticleClickListener? = null
 
-        val nameTV: TextView = itmeView.findViewById(R.id.itemNameTextViewTV)
-        val descriptionTV: TextView = itmeView.findViewById(R.id.itemDescriptionTextViewTV)
-        val imageTV: ImageView = itmeView.findViewById(R.id.itemImageViewIV)
+        interface OnArticleClickListener {
+            fun onArticleClick(article: Article, position: Int)
+        }
+
+    class ArticleViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
+        val nameTV: TextView = itemView.findViewById(R.id.itemNameTextViewTV)
+        val descriptionTV: TextView = itemView.findViewById(R.id.itemDescriptionTextViewTV)
+        val imageTV: ImageView = itemView.findViewById(R.id.itemImageViewIV)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -31,5 +37,14 @@ class CustomAdapter (private val articles: MutableList<Article>):
         holder.nameTV.text = article.name
         holder.descriptionTV.text = article.description
         holder.imageTV.setImageResource(article.image)
+        holder.itemView.setOnClickListener{
+            if(onArticleClickListener!= null) {
+                onArticleClickListener!!.onArticleClick(article,position)
+            }
+        }
+    }
+
+    fun setOnArticleClickListener(onArticleClickListener: OnArticleClickListener){
+        this.onArticleClickListener =onArticleClickListener
     }
 }

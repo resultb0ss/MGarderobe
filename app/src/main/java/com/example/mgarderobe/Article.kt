@@ -1,4 +1,6 @@
 package com.example.mgarderobe
 
-class Article (val name: String, val description: String, val image: Int) {
+import java.io.Serializable
+
+class Article (val name: String, val description: String, val image: Int): Serializable {
 }
