@@ -12,7 +12,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Мой гардероб"
+        app:title="@string/toolbar_title"
         app:titleTextColor="@color/white"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
