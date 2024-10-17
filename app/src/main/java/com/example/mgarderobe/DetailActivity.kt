@@ -1,6 +1,7 @@
 package com.example.mgarderobe
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -15,7 +16,8 @@ import com.example.mgarderobe.databinding.ActivityDetailBinding
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
-    private var article: Article? = null
+    private lateinit var article: Article
+    private var articles = ArticlesDataBase.articles
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,9 +31,9 @@ class DetailActivity : AppCompatActivity() {
         }
 
 
-        article?.image?.let { binding.detailActivityImageViewIV.setImageResource(it) }
-        binding.detailActivityNameTextViewTV.text = article?.name
-        binding.detailActivitysDescriptionTextViewTV.text = article?.description
+        binding.detailActivityImageViewIV.setImageResource(article.image)
+        binding.detailActivityNameTextViewTV.text = article.name
+        binding.detailActivitysDescriptionTextViewTV.text = article.description
 
 
         binding.detailActivityConstraintLayout.setOnLongClickListener  {
@@ -47,6 +49,17 @@ class DetailActivity : AppCompatActivity() {
                 dialog.setPositiveButton("Обновить") {_,_ ->
                     binding.detailActivityNameTextViewTV.text = editName.text.toString()
                     binding.detailActivitysDescriptionTextViewTV.text = editDescription.text.toString()
+                    val newName = binding.detailActivityNameTextViewTV.text.toString()
+                    val newDescription = binding.detailActivitysDescriptionTextViewTV.text.toString()
+                    val newArticle = Article(article.id,newName,newDescription,article.image)
+
+                    val index = search(articles,article)
+                    swap(articles,index,newArticle)
+
+                    val intent = Intent(this, SecondActivity::class.java)
+                    intent.putExtra("index", index)
+                    startActivity(intent)
+
                 }
                 dialog.setNegativeButton("Отмена") {_,_ ->}
                 dialog.create().show()
@@ -54,4 +67,19 @@ class DetailActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun swap(articles: MutableList<Article>, index: Int, newArticle: Article){
+        articles.add(index + 1, newArticle)
+        articles.removeAt(index)
+    }
+
+    private fun search(articles: MutableList<Article>, oldArticle: Article): Int {
+        var result = -1
+        for (i in articles.indices) {
+            if ( oldArticle.id == articles[i].id ) result = i
+        }
+        return result
+    }
+
+
 }

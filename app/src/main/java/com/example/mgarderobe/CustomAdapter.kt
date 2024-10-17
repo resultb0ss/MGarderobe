@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CustomAdapter (private val articles: MutableList<Article>):
+class CustomAdapter (private var articles: MutableList<Article>):
     RecyclerView.Adapter<CustomAdapter.ArticleViewHolder>() {
 
         private var onArticleClickListener: OnArticleClickListener? = null
@@ -42,6 +42,10 @@ class CustomAdapter (private val articles: MutableList<Article>):
                 onArticleClickListener!!.onArticleClick(article,position)
             }
         }
+    }
+
+    fun updateAdapter(newList: MutableList<Article>){
+        articles = newList
     }
 
     fun setOnArticleClickListener(onArticleClickListener: OnArticleClickListener){
